@@ -1,3 +1,12 @@
+#For MaterialsList.py:
 # pdfplumber
 openpyxel
 #pathos
+
+#For TextBoxCompare.py:
+#Set the pytesseract.pytesseract.tesseract_cmd to a path to tesseract
+numpy
+pyautogui
+pytesseract
+cv2
+PIL

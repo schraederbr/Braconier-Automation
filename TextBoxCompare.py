@@ -5,40 +5,45 @@ import pytesseract
 import time
 import turtle
 import cv2
-from pynput.mouse import Button, Controller
-
+from pynput.mouse import Button, Controller, Listener
 from PIL import ImageGrab
-def getCoordinate(location):
-    print("Place Cursor on the " + location + " of the box")
-    print("3")
-    time.sleep(1)
-    print("2")
-    time.sleep(1)
-    print("1")
-    time.sleep(1)
-    return pyautogui.position()
 
+def on_click(x, y, button, pressed):
+    print('{0} at {1}'.format(
+        'Pressed' if pressed else 'Released', (x, y)))
+    if not pressed:
+        # Stop listener
+        return False
+
+mousePress = ()
+mouseRelease = ()
+def on_click(x, y, button, pressed):
+    if pressed:
+        global mousePress
+        mousePress = (x,y)
+    else:
+        global mouseRelease
+        mouseRelease = (x, y)
+        return False
+        
 def getBox():
-    x1, y1 = getCoordinate("top left")
-    x2, y2 = getCoordinate("bottom right")
-    return(x1, y1, x2, y2)
+    print("Drag box around text")
+    with Listener(on_click=on_click) as listener:
+        listener.join()
+    return(mousePress[0], mousePress[1], mouseRelease[0], mouseRelease[1])
 
 def main():
-    pytesseract.pytesseract.tesseract_cmd =r'C:\\Automation\\Tesseract\\tesseract.exe'
-    mouse = Controller()
-    print("Place Cursor on save button")
-    time.sleep(3)
-    buttonPos = pyautogui.position()
-    time.sleep(2)
-    mouse.position = (buttonPos)
     t = turtle.Turtle()
     turtle.tracer(0, 0)
     t.speed(10)
     t.color("red", "red")
     screen = turtle.Screen()
     screen.setup(width=0.333, height=0.333, startx=1500, starty=0)
-
-    
+    pytesseract.pytesseract.tesseract_cmd =r'C:\\Automation\\Tesseract\\tesseract.exe'
+    mouse = Controller()
+    print("Place Cursor on save button")
+    time.sleep(3)
+    buttonPos = pyautogui.position()
     box1 = getBox()
     box2 = getBox()
     print("Box1:", box1)
