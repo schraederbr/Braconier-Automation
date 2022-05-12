@@ -72,7 +72,9 @@ fittingMaterials = {
 
 connectionTypes = {
     "ButtWld": "BUTT-WELD",
+    "Pressure": "PRESS JOINT",
     "PressFit": "PRESS JOINT",
+    "ProPress": "PRESS JOINT",
     "NoHub": "HUSKY 2000",
     "SolvWld": "Solvent",
     "Thread": "Threaded"
@@ -160,14 +162,15 @@ def findFittingMaterials(iterator):
     materials = []
     counter = 1
     # Go through row one until material is found (Copper, Steel, Etc)
+    # Finds the end of the fittings section
+    for s in sections:
+        if(s.name == "Fittings"):
+            finalRow = s.end
     for row in iterator:
         for m in fittingMaterials:
             if(row[0].value is not None and m in str(row[0].value)):
-                #might not need this loop
-                for s in sections:
-                    if(s.name == "Fittings"):
-                        if(row[0].row > s.end):
-                            return
+                if(row[0].row > finalRow):
+                    return
                 finalSheet['F' + str(counter)] = row[0].value
                 counter += 1
 
@@ -188,6 +191,12 @@ def recap(counter):
                 finalSheet['A' + str(counter)].value = systems[sys]
                 counter += 1  
     return counter                
+
+# def loop(iter, data):
+#     for row in iter:
+#         for x in data: 
+#             if(row[0].value is not None and x in str(row[0].value)):
+
 def main():
    
     

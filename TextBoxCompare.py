@@ -7,7 +7,38 @@ import turtle
 import cv2
 from pynput.mouse import Button, Controller, Listener
 from PIL import ImageGrab
+import sys
 
+# from PyQt5 import QtGui, QtCore, uic
+# from PyQt5 import QtWidgets
+# from PyQt5.QtWidgets import QMainWindow, QApplication
+
+
+# class MainWindow(QMainWindow):
+#     def __init__(self):
+#         QMainWindow.__init__(self)
+#         self.setWindowFlags(
+#             QtCore.Qt.WindowStaysOnTopHint |
+#             QtCore.Qt.FramelessWindowHint |
+#             QtCore.Qt.X11BypassWindowManagerHint
+#         )
+#         self.setGeometry(
+#             QtWidgets.QStyle.alignedRect(
+#                 QtCore.Qt.LeftToRight, QtCore.Qt.AlignCenter,
+#                 QtCore.QSize(220, 32),
+#                 QtWidgets.qApp.desktop().availableGeometry()
+#         ))
+
+#     def mousePressEvent(self, event):
+#         QtWidgets.qApp.quit()
+
+
+# if __name__ == '__main__':
+#     app = QApplication(sys.argv)
+#     mywindow = MainWindow()
+#     mywindow.show()
+#     app.exec_()
+    
 def on_click(x, y, button, pressed):
     print('{0} at {1}'.format(
         'Pressed' if pressed else 'Released', (x, y)))
@@ -17,6 +48,7 @@ def on_click(x, y, button, pressed):
 
 mousePress = ()
 mouseRelease = ()
+# may want to make sure this only works with left click, but not important
 def on_click(x, y, button, pressed):
     if pressed:
         global mousePress
@@ -84,3 +116,4 @@ def main():
 
 # Calling the function
 main()
+
