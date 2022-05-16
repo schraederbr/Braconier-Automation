@@ -56,20 +56,6 @@ copperTypes = [
     "TYPE L", "TYPE K", "PRESSFIT"
    ]
 
-fittingMaterials = {
-    #unsure if it's ever just Copper or just Bronze
-    "Copper": "Copper/Bronze",
-    "Bronze": "Copper/Bronze",
-    "NoHub": "No-Hub",
-    # not sure if their are other Malleable Iron numbers
-    # use regex
-    "Malleable Iron **** Class 150": "150# Malleable Iron",
-    # is 3000 vs 2000 important? Specs seem to say 3000
-    # "Carbon Steel - Branch Outlets 3000# - ButtWld"
-    # Might want to use regex
-    "Carbon Steel - Branch Outlets ****#": "2000# Forged Steel"
-}
-
 connectionTypes = {
     "ButtWld": "BUTT-WELD",
     "Pressure": "PRESS JOINT",
@@ -108,7 +94,32 @@ class PipeSize:
         return str(self.i) + str(self.f)
     def __repr__(self):
         return self.__str__()
-    
+
+class Fitting:
+    fittingMaterials = {
+        #unsure if it's ever just Copper or just Bronze
+        "Copper": "Copper/Bronze",
+        "Bronze": "Copper/Bronze",
+        "NoHub": "No-Hub",
+        # not sure if their are other Malleable Iron numbers
+        # use regex
+        "Malleable Iron **** Class 150": "150# Malleable Iron",
+        # is 3000 vs 2000 important? Specs seem to say 3000
+        # "Carbon Steel - Branch Outlets 3000# - ButtWld"
+        # Might want to use regex
+        "Carbon Steel - Branch Outlets ****#": "2000# Forged Steel"
+    }
+    def __init__(self, material = "", connectionType = "", manufacturer = ""):
+        self.material = material
+        self.connectionType = connectionType
+        self.manufacturer = manufacturer
+        # Force material, connectionType and  manufacterer to be in the lists above
+    def __str__(self):
+        return("{} {} {}".format(self.material, self.connectionType, self.manufacturer))# use string formatting
+    def __repr__(self):
+        return(self.__str__())
+
+activePipeMaterials = []    
 sections: list[Section] = []
 
 sourcePath = "ChilledWater.xlsx"
@@ -118,7 +129,7 @@ final = openpyxl.Workbook()
 source = openpyxl.load_workbook(sourcePath)
 sourceSheet = source.active
 finalSheet = final.active
-
+ 
 def findPipeMaterials(iterator):
     counter = 1
     # Go through row one until material is found (Copper, Steel, Etc)
@@ -131,6 +142,8 @@ def findPipeMaterials(iterator):
                         if(row[0].row > s.end):
                             return
                 finalSheet['C' + str(counter)] = row[0].value
+                finalSheet['G' + str(counter)] = m
+                activePipeMaterials.append(m)
                 findPipeSizes(iterator, counter)
                 counter += 1
 
@@ -158,21 +171,23 @@ def findPipeSizes(iterator, counter):
     elif(len(sizes) > 0):
         finalSheet['D' + str(counter)] = sizes[0]  
 
-def findFittingMaterials(iterator):
-    materials = []
+def findFittingMaterials(iterator, end):
     counter = 1
     # Go through row one until material is found (Copper, Steel, Etc)
     # Finds the end of the fittings section
     for s in sections:
         if(s.name == "Fittings"):
             finalRow = s.end
-    for row in iterator:
-        for m in fittingMaterials:
-            if(row[0].value is not None and m in str(row[0].value)):
-                if(row[0].row > finalRow):
-                    return
-                finalSheet['F' + str(counter)] = row[0].value
-                counter += 1
+    for pm in activePipeMaterials:
+        iterator = sourceSheet.iter_rows(max_row=end, max_col=sourceSheet.max_column)
+        for row in iterator:
+            for m in Fitting.fittingMaterials:
+                if(row[0].value is not None and m in str(row[0].value)):
+                    if(row[0].row > finalRow):
+                        return
+                    finalSheet['F' + str(counter)] = row[0].value
+                    finalSheet['H' + str(activePipeMaterials.index(pm) + 1)] = m
+                    counter += 1
 
 def recap(counter):
     iterator = sourceSheet.iter_rows(max_row=sourceSheet.max_row, max_col=sourceSheet.max_column)  
@@ -233,7 +248,7 @@ def main():
             findPipeMaterials(rowIter)   
         if(sect.name == "Fittings"):
             rowIter = sourceSheet.iter_rows(max_row=sect.end, max_col=sourceSheet.max_column)
-            findFittingMaterials(rowIter)
+            findFittingMaterials(rowIter, sect.end)
 
             
          
