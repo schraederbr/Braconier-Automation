@@ -1,4 +1,3 @@
-from lib2to3.pgen2.token import COLON
 import os
 
 sections = {

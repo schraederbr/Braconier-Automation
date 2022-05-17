@@ -1,10 +1,7 @@
 #could probably clean up these imports
-from importlib.resources import path
-import re
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
-import tkinter as tk
 from RenameTools import *
 import warnings
 
@@ -60,11 +57,15 @@ renameButton = ttk.Button(win, text = "Rename All Files",
     command=lambda: renameFiles((sectionComboBox.get() + e1.get()), paths))
 renameButton.grid(row = 1, column = 5)
 
+
 def autoRenameFolders(folders):
+    '''Renames folders based on known section and manufacturers'''
     for f in folders:
         autoRenameFolder(f)
 
+
 def autoRenameFolder(f):
+    '''Renames single folder based on knonwn sections and manufacturers'''
     if not(f is None):
         os.chdir(f)
         for p in os.listdir():
