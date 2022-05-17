@@ -10,3 +10,6 @@ pyautogui
 pytesseract
 cv2
 PIL
+
+#For BulkRename.py
+tk
