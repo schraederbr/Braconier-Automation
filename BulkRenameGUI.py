@@ -48,15 +48,15 @@ def selectFolder():
         paths.append(path)
         #label to display folder path
         l = Label(win, text = paths[-1], font = 11)
-        l.grid(row = 7 + len(paths))
+        l.grid(row = 7 + len(paths), columnspan=4)
         #button to delete folder path
         b = ttk.Button(win, text = "Delete", command = lambda: deleteLabel(l, b))
-        b.grid(row = 7 + len(paths), column = 1)
+        b.grid(row = 7 + len(paths), column = 5)
     
 addFolderButton = ttk.Button(win, text = "Add Folder", command = selectFolder)
 addFolderButton.grid(row = 1, column = 4)
 
-renameButton = ttk.Button(win, text = "Rename All",
+renameButton = ttk.Button(win, text = "Rename All Files",
     command=lambda: renameFiles((sectionComboBox.get() + e1.get()), paths))
 renameButton.grid(row = 1, column = 5)
 
@@ -87,7 +87,7 @@ def autoRenameFolder(f):
                         renameFiles("23 00 " + p, os.getcwd())
                 os.chdir(f)
 
-autoButton = ttk.Button(win, text = "Auto Rename First Folder", command = lambda: autoRenameFolders(paths))
+autoButton = ttk.Button(win, text = "Auto Rename Folders", command = lambda: autoRenameFolders(paths))
 autoButton.grid(row = 2, column = 4)
 
 win.mainloop()
