@@ -1,5 +1,6 @@
 # # reading PDF
-import pdfplumber 
+from tkinter import filedialog
+# import pdfplumber 
     
 
 # acronyms = ["CHWR", "CHWS", "COND DRAIN", "DCW", "DHW", Gas, HHWR, HHWS, 
@@ -13,12 +14,12 @@ import pdfplumber
 #      print(first_page.extract_text())
 
 
-from asyncio import subprocess
-from itertools import count
-import sys
-from tracemalloc import stop
-from typing import Iterator
-from unicodedata import name
+# from asyncio import subprocess
+# from itertools import count
+# import sys
+# from tracemalloc import stop
+# from typing import Iterator
+# from unicodedata import name
 import openpyxl
 import re
 import pathos as p
@@ -207,14 +208,16 @@ def recap(counter):
                 counter += 1  
     return counter                
 
-# def loop(iter, data):
-#     for row in iter:
-#         for x in data: 
-#             if(row[0].value is not None and x in str(row[0].value)):
+
+filetypes = (
+        ('Excel Workbook', '*.xlsx *.xlsm'),
+        ('All files', '*.*')
+    )
 
 def main():
    
-    
+    path = filedialog.askopenfile(title="Select File", filetypes=filetypes)
+    print(path)
     # Iterates, finding sections
     counter = 1
     rowIter = sourceSheet.iter_rows(max_row=sourceSheet.max_row, max_col=sourceSheet.max_column)

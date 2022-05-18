@@ -1,5 +1,7 @@
 import os
 
+#Not sure if I should have this here, 
+# maybe move other dictionaries from MaterialsChart.py here
 sections = {
     "22 00 ": ["Winsupply "],
     "23 00 ": ["A&P ", "Allied ", "CFM ", "Engineered Products "
@@ -16,6 +18,9 @@ def renameFiles(header, folders):
     else:
         raise Exception("expected folderPaths to be str or list[str]")
 
+#make sure this __ usage is correct
+# if these functions don't change, possible combine them 
+#, if it makes them more readable
 def __renameFilesString(header, folderPath: str):
     os.chdir(folderPath)
     for path in os.listdir():
