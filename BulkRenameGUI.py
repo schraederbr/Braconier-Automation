@@ -97,7 +97,8 @@ def autoRenameFolder(f):
     if(bookPath == ""):
         warnings.warn("Book Assembly folder not found, files will not be copied")
     else:
-        # Auto unpack ZIP files
+        # Add Auto unpack ZIP files
+        # Add stitching the documents together, hopefully with bluebeam
         for p in validPaths:
             os.chdir(p)
             for f in os.listdir():

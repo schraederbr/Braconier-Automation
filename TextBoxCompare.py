@@ -64,7 +64,7 @@ def getBox():
         listener.join()
     return(mousePress[0], mousePress[1], mouseRelease[0], mouseRelease[1])
 
-def main():
+if __name__ == '__main__':
     t = turtle.Turtle()
     turtle.tracer(0, 0)
     t.speed(10)
@@ -115,5 +115,5 @@ def main():
         print(box2text)
 
 # Calling the function
-main()
+
 

@@ -4,3 +4,5 @@ test/
 testing/
 __pycache__
 *-CLOSEOUT*/
+monkeytype.sqlite3
+bearer.txt

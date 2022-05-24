@@ -214,8 +214,7 @@ filetypes = (
         ('All files', '*.*')
     )
 
-def main():
-   
+if __name__ == '__main__':
     path = filedialog.askopenfile(title="Select File", filetypes=filetypes)
     print(path)
     # Iterates, finding sections
@@ -295,4 +294,3 @@ def main():
     #         print(sheet_obj.cell(i, j).value)
     #         j = j + 1
     #     i = i + 1
-main()
