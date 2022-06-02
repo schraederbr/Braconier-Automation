@@ -6,3 +6,6 @@ __pycache__
 *-CLOSEOUT*/
 monkeytype.sqlite3
 bearer.txt
+build/*
+*.spec
+dist/*

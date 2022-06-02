@@ -3,11 +3,12 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
 from RenameTools import *
+import RenameTools as RT
 import warnings
 import shutil
 
 # add buttons gray out when they shouldn't be used
-# like if 
+# add UI indicating of when thing are loading and they are done
 
 def deleteLabel(label, b):
     '''Deletes tkinter label and button. Removes associated path from paths'''
@@ -57,7 +58,7 @@ addFolderButton = ttk.Button(win, text = "Add Folder", command = selectFolder)
 addFolderButton.grid(row = 1, column = 4)
 
 renameButton = ttk.Button(win, text = "Rename All Files",
-    command=lambda: renameFiles((sectionComboBox.get() + e1.get()), paths))
+    command=lambda: renameFiles(paths, (sectionComboBox.get() + e1.get()), toRemove=True, charsToRemove=4))
 renameButton.grid(row = 1, column = 5)
 
 
@@ -80,17 +81,19 @@ def autoRenameFolder(f):
                 os.chdir(p)
                 # might be better way to avoid using recognized variable
                 recognized = False
-                for key in sections:
-                    for s in sections[key]:
+                for key in RT.sections:
+                    for s in RT.sections[key]:
                         if(s in p):
-                            renameFiles(key + s, os.getcwd())
+                            renameFiles(os.getcwd(), key + s)
                             recognized = True         
                 if not(recognized):
                     if ("Book Assembly" in p):
                         bookPath = os.getcwd()
                     elif not ("Book Assembly" in p):
-                        warnings.warn("Folder name not recognized, defaulting to 23 00 + FOLDERNAME") 
-                        renameFiles("23 00 " + p, os.getcwd())
+                        print("Bad: " + s + ": " + p)
+                        #warnings.warn("Folder name not recognized, defaulting to 23 00 + FOLDERNAME: " + p)
+                        #warnings.warn("Folder name not recognized, defaulting to 23 00 + FOLDERNAME: " + p) 
+                        # renameFiles("23 00 " + p, os.getcwd())
                 elif(recognized):
                     validPaths.append(os.getcwd())
                 os.chdir(f)

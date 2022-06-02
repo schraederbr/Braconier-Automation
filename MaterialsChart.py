@@ -130,7 +130,7 @@ final = openpyxl.Workbook()
 source = openpyxl.load_workbook(sourcePath)
 sourceSheet = source.active
 finalSheet = final.active
- 
+
 def findPipeMaterials(iterator):
     counter = 1
     # Go through row one until material is found (Copper, Steel, Etc)
