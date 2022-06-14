@@ -9,3 +9,6 @@ bearer.txt
 build/*
 *.spec
 dist/*
+PlumbingFixtures/WinPython*
+~*
+
