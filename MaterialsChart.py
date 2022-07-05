@@ -1,5 +1,13 @@
 # # reading PDF
+import os
+import sys
 from tkinter import filedialog
+
+# may want to use pdfplumber and my own parser, instead of convertin to xlsx
+# because sometimes line have two lines worth of data in a single cell
+# Also, should try out different pdf to xlsx converters bluebeam might not be consistent
+
+
 # import pdfplumber 
     
 
@@ -126,15 +134,13 @@ sections: list[Section] = []
 sourcePath = "ChilledWater.xlsx"
 finalPath = "final.xlsx"
 
-final = openpyxl.Workbook()
-source = openpyxl.load_workbook(sourcePath)
-sourceSheet = source.active
-finalSheet = final.active
+
 
 def findPipeMaterials(iterator):
     counter = 1
     # Go through row one until material is found (Copper, Steel, Etc)
     for row in iterator:
+        # may need to use regex
         for m in pipeMaterials:
             if(row[0].value is not None and m in str(row[0].value)):
                 #should figure out how to remove this loop
@@ -148,22 +154,51 @@ def findPipeMaterials(iterator):
                 findPipeSizes(iterator, counter)
                 counter += 1
 
+def findPipeQuantity(iterator):
+    readingQuantity = False
+    totalInches = 0
+    quantityColumn = 0
+    for row in iterator:
+        #print(row[6].value)
+        if(readingQuantity):
+            if(isinstance(row[quantityColumn].value, int)):
+                totalInches += row[quantityColumn].value
+                print("Total: {}".format(totalInches))
+            else:
+                #print(totalInches)
+                readingQuantity = False
+                totalInches = 0
+        for c in row:
+            if(c.value is not None and isinstance(c.value, str) and "quantity" in str(c.value).lower()):
+                # print(c.column)
+                quantityColumn = c.column - 1
+                readingQuantity = True
+                break
+        
+            
+    print("{} total inches".format(totalInches))    
 
 def findPipeSizes(iterator, counter):
     # we find item and size, in the first row,
     # Scan from first line without letters to last line without letters
-    started = False;
+    started = False
     sizes = []
     for row in iterator:
-        value = row[0].value
-        if(value is not None):
-            if(isinstance(value, int)):
-                sizes.append(str(value))
+        r0Value = row[0].value
+        #print(str(row[6].value))
+        if(r0Value is not None):
+            # this doesn't always work, sometimes a cell has text then a number on the line below
+            # and thus isn't an int type
+            if(isinstance(r0Value, int)):
+                sizes.append(str(r0Value))
                 started = True
-            elif(isinstance(value, str) and not re.search('[a-zA-Z]', row[0].value)):
+            elif(isinstance(r0Value, str) and '\n' in r0Value):
+                #parse out the real value, probably need a try catch, or with
+                pass
+            elif(isinstance(r0Value, str) and not re.search('[a-zA-Z]', row[0].value)):
                 #might want to add to the regex above instead of this if below
-                if(not " " in value):
-                    sizes.append((value))
+                if(not " " in r0Value):
+                    sizes.append((r0Value))
                 started = True
             elif(started):
                 break
@@ -215,8 +250,17 @@ filetypes = (
     )
 
 if __name__ == '__main__':
-    path = filedialog.askopenfile(title="Select File", filetypes=filetypes)
-    print(path)
+    final = openpyxl.Workbook()
+    if(len(sys.argv) > 1):
+        sourcePath = sys.argv[1]
+    else:
+        sourceFile = filedialog.askopenfile(title="Select File", filetypes=filetypes)
+        sourcePath = os.path.basename(sourceFile.name)
+    print(sourcePath)
+    source = openpyxl.load_workbook(sourcePath)
+    sourceSheet = source.active
+    finalSheet = final.active
+    
     # Iterates, finding sections
     counter = 1
     rowIter = sourceSheet.iter_rows(max_row=sourceSheet.max_row, max_col=sourceSheet.max_column)
@@ -255,11 +299,10 @@ if __name__ == '__main__':
             
          
     
-    
-                
                 
     # check that the last section has an endpoint
-    
+    rowIter = sourceSheet.iter_rows(max_row=sect.end, max_col=sourceSheet.max_column)
+    findPipeQuantity(rowIter)
     print(sections)    
     final.save(filename = "final.xlsx")
     # Give the location of the file

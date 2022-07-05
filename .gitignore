@@ -11,5 +11,5 @@ build/*
 dist/*
 PlumbingFixtures/WinPython*
 ~*
-
+*.xlsx
 PlumbingFixturesForROIS/WinPython/*

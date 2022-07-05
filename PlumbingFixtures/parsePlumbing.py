@@ -6,7 +6,6 @@ from typing import List
 
 import openpyxl
 from tkinter import filedialog
-import pycel
 
 
 
@@ -29,7 +28,7 @@ class plumbingJob:
 
         def equals(self, otherRow: plumbingJob.partRow):
             if (self.id == otherRow.id 
-                  and "".join(self.description.split()) == "".join(otherRow.description.split())
+                  and "".join(self.description.split()).lower() == "".join(otherRow.description.split()).lower()
                   and self.size_strength == otherRow.size_strength):
                 return True
             return False
@@ -47,10 +46,9 @@ class plumbingJob:
         def __repr__(self) -> str:
             return str(self)
     
-    def __init__(self, title, rows: List[partRow] = [], column = 'A'):
+    def __init__(self, title, rows: List[partRow] = []):
         self.rows = rows
         self.title = title
-        self.column = column
     
     def addRow(self, row):
         self.rows.append(row)
@@ -91,12 +89,8 @@ def parseFixtures(sourcePath, sourceQuantityCol, sourceStartRow):
     finalSheet[sourceQuantityCol + str(sourceStartRow - 1)] = sourcePath
     
     iterator = sourceSheet.iter_rows(min_row=sourceStartRow, max_row=sourceSheet.max_row, max_col=sourceSheet.max_column)
-    #finalSheet[identityCol + '1'] = "Identification"
-    #finalSheet[finalSizeCol + '1'] = "Size/Strength"
-    #finalSheet[finalManufacturerCol + '1'] = "Manufacturer"
-    #finalSheet[finalQuantityCol + '1'] = "Original Quantity Per Fixture"
     i = 3
-    thisJob = plumbingJob(sourcePath.split('.')[0].split('/')[1], [])
+    thisJob = plumbingJob(os.path.basename(sourcePath), [])
     #maybe create a data structure that is a row 
     for row in iterator:
         currentRow = row[0].row
@@ -104,19 +98,12 @@ def parseFixtures(sourcePath, sourceQuantityCol, sourceStartRow):
         currentCell = sourceSheet[sourceQuantityCol + currentRow].value
         if currentCell is not None and currentCell != 0:
             tagID = sourceSheet[tagIdCol + currentRow].value
-            #finalSheet[tagIdCol + str(i)].value = tagID
             quantity = sourceSheet[sourceQuantityCol + currentRow].internal_value
             if "=" in str(quantity):
                 quantity = "ERROR" 
-            #finalSheet[finalQuantityCol + str(i)].value = quantity
             description = sourceSheet[descriptionCol + currentRow].value
-            #finalSheet[descriptionCol + str(i)].value = description
-            identification = "{} --> {}".format(tagID, description)
-            #finalSheet[finalIdentityCol + str(i)].value = identification
             manufacturer = sourceSheet[souceManufacturerColumn + currentRow].value
-            #finalSheet[finalManufacturerCol + str(i)].value = manufacturer
             size = sourceSheet[sourceSizeCol + currentRow].value
-            #finalSheet[finalSizeCol + str(i)].value = size
             bidDayUnitPrice = 0
             for c in row:
                 if type(c.value) is str and 'SELECTED' in c.value:
@@ -131,14 +118,14 @@ my_red = openpyxl.styles.colors.Color(rgb='00FF0000')
 my_fill = openpyxl.styles.fills.PatternFill(patternType='solid', fgColor=my_red)
 
 if __name__ == '__main__':
-    # I wonder if there is a way to without all the uses of chr(ord()) like a way to increment the row and column
-    # using chr(ord(column) + 1) fails if you overflow from Z, it doesn't give you AA
-    # maybe like this: bidDayUnitPrice = sourceSheet.cell(row=c.row, column=c.column).value
+    sPath = filedialog.askdirectory(title = "Select the directory containing take-offs")
+    #sPath = os.path.basename()
+    print(sPath)
 
     myJobs: List[plumbingJob] = []
     sourcePaths = []
-    for f in os.listdir('jobs'):
-        sourcePaths.append('jobs/' + f)
+    for f in os.listdir(sPath):
+        sourcePaths.append('{}/'.format(sPath) + f)
     sys.argv = ['', 'B', 'Y', 18]
     sourceQuantityCol = sys.argv[1]
     bidDayPriceCol = sys.argv[2]
@@ -149,47 +136,44 @@ if __name__ == '__main__':
     rowCounter = 3
     spacing = 3
     rowIndex = {}
-    #myJo#bs[0].addRow(plumbingJob.partRow(id="100", quantity="10", size_strength="2'", description="Nothing", manufacturer="Test"))
-    #myJobs[1].addRow(plumbingJob.partRow(id="100", quantity="10", size_strength="2'", description="Nothing", manufacturer="Test"))
-    #myJobs[2].addRow(plumbingJob.partRow(id="100", quantity="10", size_strength="2'", description="Nothing", manufacturer="Test"))
     finalSheet['A2'] = "Identification"
     finalSheet['B2'] = "Size/Strength"
     for i, j in enumerate(myJobs):
-
-        j.column = chr(ord('A') + (i + len(sourcePaths)))
-        finalSheet[chr(ord(j.column)+i*spacing) + str(1)] = j.title
-        finalSheet[chr(ord(j.column)+i*spacing) + str(2)] = 'Manufacturer'
-        finalSheet[chr(ord(j.column)+i*spacing+1) + str(2)] = 'Quantity'
-        finalSheet[chr(ord(j.column)+i*spacing+2) + str(2)] = 'Bid Day Total Price'
-        finalSheet[chr(ord(j.column)+i*spacing+3) + str(2)] = 'Bid Day Unit Price'
+        baseColumn = (i + len(sourcePaths)) + i*spacing + 1
+        finalSheet.cell(column=baseColumn, row=1).value = j.title
+        print(j.title)
+        finalSheet.cell(column=baseColumn, row=2).value = 'Manufacturer'
+        finalSheet.cell(column=baseColumn+1, row=2).value = 'Quantity'
+        finalSheet.cell(column=baseColumn+2, row=2).value = 'Bid Day Total Price'
+        finalSheet.cell(column=baseColumn+3, row=2).value = 'Bid Day Unit Price'
         for row in j.rows:
+            
             #may need to compare rows in a less exact way, so that similar rows are not duplicated
             for r in rowIndex:
                 if row.equals(r):
                     print('Same row found')
-                    #finalSheet[j.column + str(rowIndex[r])] = str(row)
-                    finalSheet[chr(ord(j.column)+i*spacing) + str(rowIndex[r])] = row.manufacturer
+                    print("Manufacturer: {}, Bid Day Unit Price: {}".format(row.manufacturer, row.bidDayUnitPrice))
+                    finalSheet.cell(column=baseColumn, row=rowIndex[r]).value = row.manufacturer
                     if("ERROR" in str(row.quantity)):
-                        finalSheet[chr(ord(j.column)+i*spacing+1) + str(rowIndex[r])].fill = my_fill
-                    finalSheet[chr(ord(j.column)+i*spacing+1) + str(rowIndex[r])] = row.quantity
-                    finalSheet[chr(ord(j.column)+i*spacing+2) + str(rowIndex[r])] = row.getTotalPrice()
-                    finalSheet[chr(ord(j.column)+i*spacing+3) + str(rowIndex[r])] = row.bidDayUnitPrice
+                        finalSheet.cell(column=baseColumn+1, row=rowIndex[r]).fill = my_fill
+                    finalSheet.cell(column=baseColumn+1, row=rowIndex[r]).value = row.quantity
+                    finalSheet.cell(column=baseColumn+2, row=rowIndex[r]).value = row.getTotalPrice()
+                    finalSheet.cell(column=baseColumn+3, row=rowIndex[r]).value = row.bidDayUnitPrice
                     break
             else:
                 row.row = rowCounter
                 rowIndex[row] = rowCounter
                 rowCounter += 1
-                finalSheet['A' + str(row.row)] = row.getIdentity()
-                finalSheet['B' + str(row.row)] = row.size_strength
-                #finalSheet['C' + str(row.row)] = row.manufacturer
-                finalSheet[chr(ord(j.column)+i*spacing) + str(row.row)] = row.manufacturer
+                finalSheet.cell(column=1, row=row.row).value = row.getIdentity()
+                finalSheet.cell(column=2, row=row.row).value = row.size_strength
+
+                finalSheet.cell(column=baseColumn, row=row.row).value = row.manufacturer
+
                 if("ERROR" in str(row.quantity)):
-                    finalSheet[chr(ord(j.column)+i*spacing+1) + str(row.row)].fill = my_fill
-                finalSheet[chr(ord(j.column)+i*spacing+1) + str(row.row)] = row.quantity
-                finalSheet[chr(ord(j.column)+i*spacing+2) + str(row.row)] = row.getTotalPrice()
-                finalSheet[chr(ord(j.column)+i*spacing+3) + str(row.row)] = row.bidDayUnitPrice
-                #finalSheet[chr(ord(j.column) + 1) + str(row.row)] = str(row)
-                
+                    finalSheet.cell(column=baseColumn+1, row=row.row).fill = my_fill
+                finalSheet.cell(column=baseColumn+1, row=row.row).value = row.quantity
+                finalSheet.cell(column=baseColumn+2, row=row.row).value = row.getTotalPrice()
+                finalSheet.cell(column=baseColumn+3, row=row.row).value = row.bidDayUnitPrice                
     #print(myJobs)
     #print(*rowIndex, sep='\n')
     final.save(finalPath)
