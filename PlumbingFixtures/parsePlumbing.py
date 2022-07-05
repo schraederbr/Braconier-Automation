@@ -73,6 +73,7 @@ final = openpyxl.Workbook()
 finalSheet = final.active
 
 def parseFixtures(sourcePath, sourceQuantityCol, sourceStartRow):
+    #Update this not to use chr(ord) so much
     source = openpyxl.load_workbook(sourcePath)
     sourceSheet = source['Plbg']
     tagIdCol = chr(ord(sourceQuantityCol) + 1)

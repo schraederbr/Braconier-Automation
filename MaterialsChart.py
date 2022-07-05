@@ -148,33 +148,41 @@ def findPipeMaterials(iterator):
                     if(s.name == "Pipe"):
                         if(row[0].row > s.end):
                             return
-                finalSheet['C' + str(counter)] = row[0].value
-                finalSheet['G' + str(counter)] = m
+                finalSheet.cell(column=3+currentColumn, row=counter).value = row[0].value
+                #rowIter = sourceSheet.iter_rows(min_row=counter, max_col=sourceSheet.max_column)
+                print(row[0].value)
+                #findPipeQuantity(rowIter)
+                #finalSheet.cell(column=7+currentColumn, row=counter).value = m
                 activePipeMaterials.append(m)
                 findPipeSizes(iterator, counter)
                 counter += 1
 
 def findPipeQuantity(iterator):
+    pipeQuantity = []
     readingQuantity = False
     totalInches = 0
     quantityColumn = 0
     for row in iterator:
         #print(row[6].value)
         if(readingQuantity):
+            #this isn't perfect because sometimes their is a blank line below quantity
             if(isinstance(row[quantityColumn].value, int)):
                 totalInches += row[quantityColumn].value
                 print("Total: {}".format(totalInches))
             else:
                 #print(totalInches)
+                pipeQuantity.append((totalInches))
                 readingQuantity = False
                 totalInches = 0
+                print("PipeQuantity: " + str(pipeQuantity))
+                return
         for c in row:
             if(c.value is not None and isinstance(c.value, str) and "quantity" in str(c.value).lower()):
                 # print(c.column)
                 quantityColumn = c.column - 1
                 readingQuantity = True
                 break
-        
+    print(pipeQuantity)    
             
     print("{} total inches".format(totalInches))    
 
@@ -202,10 +210,11 @@ def findPipeSizes(iterator, counter):
                 started = True
             elif(started):
                 break
+    print(sizes)
     if(len(sizes) > 1):
-        finalSheet['D' + str(counter)] = sizes[0] + '" TO ' + sizes[-1] + '"'
+        finalSheet.cell(column=4+currentColumn, row=counter).value = sizes[0] + '" TO ' + sizes[-1] + '"'
     elif(len(sizes) > 0):
-        finalSheet['D' + str(counter)] = sizes[0]  
+        finalSheet.cell(column=4+currentColumn, row=counter).value = sizes[0]
 
 def findFittingMaterials(iterator, end):
     counter = 1
@@ -214,6 +223,7 @@ def findFittingMaterials(iterator, end):
     for s in sections:
         if(s.name == "Fittings"):
             finalRow = s.end
+    #Why is pm not being used?
     for pm in activePipeMaterials:
         iterator = sourceSheet.iter_rows(max_row=end, max_col=sourceSheet.max_column)
         for row in iterator:
@@ -221,8 +231,8 @@ def findFittingMaterials(iterator, end):
                 if(row[0].value is not None and m in str(row[0].value)):
                     if(row[0].row > finalRow):
                         return
-                    finalSheet['F' + str(counter)] = row[0].value
-                    finalSheet['H' + str(activePipeMaterials.index(pm) + 1)] = m
+                    #finalSheet.cell(column=6+currentColumn, row=counter).value = row[0].value
+                    #finalSheet.cell(column=8+currentColumn, row=counter).value = m
                     counter += 1
 
 def recap(counter):
@@ -234,12 +244,11 @@ def recap(counter):
             if(row[0].value is not None and sys in str(row[0].value)):
                 # print(str(row[0].row) + systems[s])
                 # might have both above and under ground in same PDF
-                
-                finalSheet['E' + str(counter)].value = "UNDERGROUND" if sys + " UG" in str(row[0].value) else "ABOVE GROUND"
+                finalSheet.cell(column=5+currentColumn, row=counter).value = "UNDERGROUND" if sys + " UG" in str(row[0].value) else "ABOVE GROUND"
                 # if(sys + " UG" in str(row[0].value)):
                 #     finalSheet['F' + str(counter)].value = "UNDERGROUND"
                 # else: "ABOVE GROUND"
-                finalSheet['A' + str(counter)].value = systems[sys]
+                finalSheet.cell(column=1+currentColumn, row=counter).value = systems[sys]
                 counter += 1  
     return counter                
 
@@ -249,18 +258,8 @@ filetypes = (
         ('All files', '*.*')
     )
 
-if __name__ == '__main__':
-    final = openpyxl.Workbook()
-    if(len(sys.argv) > 1):
-        sourcePath = sys.argv[1]
-    else:
-        sourceFile = filedialog.askopenfile(title="Select File", filetypes=filetypes)
-        sourcePath = os.path.basename(sourceFile.name)
-    print(sourcePath)
-    source = openpyxl.load_workbook(sourcePath)
-    sourceSheet = source.active
-    finalSheet = final.active
-    
+
+def readFile():
     # Iterates, finding sections
     counter = 1
     rowIter = sourceSheet.iter_rows(max_row=sourceSheet.max_row, max_col=sourceSheet.max_column)
@@ -274,7 +273,7 @@ if __name__ == '__main__':
                     else:
                         currentSection.end = row[0].row - 1
                         sections.append(currentSection)
-                        finalSheet['B' + str(counter)].value = str(currentSection)
+                        finalSheet.cell(column=2+currentColumn, row=counter).value = str(currentSection)
                         counter += 1
                         currentSection = Section(start=row[0].row)
                 currentSection.name = sect
@@ -301,39 +300,25 @@ if __name__ == '__main__':
     
                 
     # check that the last section has an endpoint
-    rowIter = sourceSheet.iter_rows(max_row=sect.end, max_col=sourceSheet.max_column)
-    findPipeQuantity(rowIter)
+    #rowIter = sourceSheet.iter_rows(max_row=sect.end, max_col=sourceSheet.max_column)
+    #findPipeQuantity(rowIter)
     print(sections)    
+    
+
+currentColumn = 0
+if __name__ == '__main__':
+    #main lives in the same namespace as top level code interesting, so no need for global calls
+    final = openpyxl.Workbook()
+    folderPath = filedialog.askdirectory(title="Select Folder With Material Charts")
+    for file in os.listdir(folderPath):
+        sourcePath  = os.path.join(folderPath, file)
+        print(sourcePath)
+        source = openpyxl.load_workbook(sourcePath)
+        sourceSheet = source.active
+        finalSheet = final.active
+        readFile()
+        currentColumn += 11
     final.save(filename = "final.xlsx")
     # Give the location of the file
     subprocess.run("explorer final.xlsx")
-
-    # To open the workbook
-    # workbook object is created
     
-
-    # Get workbook active sheet object
-    # from the active attribute
-    
-
-    # Cell objects also have a row, column,
-    # and coordinate attributes that provide
-    # location information for the cell
-
-    # Cell object is created by using
-    # sheet object's cell() method.
-    # while(True):
-    #     print("Enter column of systems (Letter)")
-    #     c = input()
-    #     print(c)
-    #     print("Enter row of systems (Integer)")
-    #     r = input()
-    #     print(r)
-    #     print(sourceSheet[c+r].value)
-    # i = 1
-    # while(i < 10):
-    #     j = 1
-    #     while(j < 10):
-    #         print(sheet_obj.cell(i, j).value)
-    #         j = j + 1
-    #     i = i + 1
