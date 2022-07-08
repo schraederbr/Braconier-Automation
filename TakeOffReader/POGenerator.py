@@ -56,11 +56,9 @@ if __name__ == '__main__':
                 currentMaterial = sourceSheet["G" + str(i+1)].value
             if(sourceSheet["F" + str(i+1)].value is not None and sourceSheet["F" + str(i+1)].value != "Item"):
                 currentName = sourceSheet["F" + str(i+1)].value
+            #This if may need to be improved, more detailed, it may have exceptions I haven't covered
             if(sourceSheet["I" + str(i+1)].value is not None and sourceSheet["O" + str(i+1)].value is not None):
-                lineItems.append(LineItem(currentType, currentMaterial, currentName, sourceSheet["I" + str(i+1)].value, sourceSheet["O" + str(i+1)].value))
-            #print(sourceSheet["O" + str(i+1)].value)
-        
-        
+                lineItems.append(LineItem(currentType, currentMaterial, currentName, sourceSheet["I" + str(i+1)].value, sourceSheet["O" + str(i+1)].value))   
         fileName = file + ".csv"
         f = open(fileName, "w")
         f.write("{},{},{},{},{}\n".format("Type", "Material", "Name", "Size", "Quantity"))           
@@ -70,6 +68,8 @@ if __name__ == '__main__':
             #print(query)
             cur.execute(query)
     f.close()
+    #May want # HAVING COUNT(*)>1; at the end I don't know what this does though
+    #Create a separate table with this data in the database:
     print(*cur.execute("""SELECT SUM(quantity) as 'Total Quantity', Type, Material, Name, Size 
     FROM LineItems GROUP BY Size, Name, Material, Type """).fetchall(), sep='\n')
     con.commit()
