@@ -18,7 +18,7 @@ class LineItem:
 
 # Query to Combine rows: Not sure what the having count does
 # SELECT SUM(quantity) as 'Total Quantity', Type, Material, Name, Size 
-# FROM LineItems WHERE Type="Pipe" 
+# FROM LineItems 
 # GROUP BY Size, Name, Material, Type 
 # HAVING COUNT(*)>1;
 
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     cur = con.cursor()
     #main lives in the same namespace as top level code interesting, so no need for global calls
     folderPath = filedialog.askdirectory(title="Select Folder With Material Charts")
-    folderPath = "C:\Automation\TakeOffReader\Takeoffs"
+    #folderPath = "C:\Automation\TakeOffReader\Takeoffs"
     print(cur.execute("DROP TABLE IF EXISTS LineItems").fetchall())
     print(cur.execute("""CREATE TABLE LineItems(
             Type VARCHAR(50) NOT NULL,
@@ -38,6 +38,7 @@ if __name__ == '__main__':
             Size VARCHAR(50) NOT NULL,
             Quantity REAL NOT NULL
             );""").fetchall())
+    #print(*(os.listdir(folderPath)), sep='\n')
     for file in os.listdir(folderPath):
         sourcePath  = os.path.join(folderPath, file)
         print(sourcePath)
@@ -66,10 +67,13 @@ if __name__ == '__main__':
         for l in lineItems:
             f.write(str(l))
             query = 'INSERT INTO LineItems(Type, Material, Name, Size, Quantity) VALUES("{}", "{}", "{}", "{}", {})'.format( l.type, l.material, l.name, l.size, l.quantity)
-            print(query)
-            print(cur.execute(query).fetchall())
-        f.close()
-        con.commit()
+            #print(query)
+            cur.execute(query)
+    f.close()
+    print(*cur.execute("""SELECT SUM(quantity) as 'Total Quantity', Type, Material, Name, Size 
+    FROM LineItems GROUP BY Size, Name, Material, Type """).fetchall(), sep='\n')
+    con.commit()
+
         
     
     
