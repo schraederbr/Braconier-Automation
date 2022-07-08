@@ -253,6 +253,8 @@ if __name__ == '__main__':
                 b[2].employees.append(e) 
     for b in dateBins:
         print(b)
+
+#Create UI that asks for job numbers
     
     
     
