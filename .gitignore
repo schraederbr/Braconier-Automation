@@ -13,3 +13,6 @@ PlumbingFixtures/WinPython*
 ~*
 *.xlsx
 PlumbingFixturesForROIS/WinPython/*
+*build*
+*dist*
+!build.bat
