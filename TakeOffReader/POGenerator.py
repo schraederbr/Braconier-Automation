@@ -11,8 +11,12 @@ import FolderSearcher
 import pyexcel as p
 import shutil
 
+#Add warning and popup incase output.csv cannot be written to
+#Add different job columns
+#How to speed up startup when running as an EXE?
 #Submit button not getting properly disabled
-
+#Need to make this work in any arbitrary year folder. Currently just set to 2022
+#How to deal with duplicates, maybe have a f
 
 #The plus button and the boxes I don't think line up still 
 class LineItem:
@@ -70,7 +74,6 @@ def createButton(btn):
     idB = Entry(win, textvariable=SV, font=('Aerial 16'), width=8)
     jobBoxes.append(idB)
     idB.grid(row=jobIndex, column='0', sticky='n')
-    #Might be able to use a pure lambda that doesn't call deleteBox to destroy
     lIn = ttk.Button(win, text="Delete", command=lambda: deleteBox(idB, lIn))
     lIn.grid(row=jobIndex, column = 2)
     
@@ -104,6 +107,8 @@ def makeDatabase(paths):
             );""").fetchall())
     for file in paths:
         convertAndCache(file)
+    #Needs a try catch when opening the files, or a with statement. 
+    #To prevent corrupted or incorrectly labeled xl files from crashing the program
     for file in Path("FileCache").glob("*"):
     #     print(p)
     # for file in paths:
@@ -129,7 +134,7 @@ def makeDatabase(paths):
                 currentName = sourceSheet["F" + str(i+1)].value
             #This if may need to be improved, more detailed, it may have exceptions I haven't covered
             if(sourceSheet["I" + str(i+1)].value is not None and sourceSheet["O" + str(i+1)].value is not None):
-                lineItems.append(LineItem(currentType, currentMaterial, currentName, sourceSheet["I" + str(i+1)].value, sourceSheet["O" + str(i+1)].value, file))   
+                lineItems.append(LineItem(currentType, currentMaterial, currentName, sourceSheet["I" + str(i+1)].value, sourceSheet["O" + str(i+1)].value, file.stem))   
         #Should use the csv writer instead of this manual method
         #fileName = file.stem + ".csv"
         #f = open(fileName, "w")
@@ -143,14 +148,20 @@ def makeDatabase(paths):
         #f.close()
     #May want # HAVING COUNT(*)>1; at the end I don't know what this does though
     #Create a separate table with this data in the database:
-    cur.execute("""CREATE TABLE Condensed AS SELECT Type, Material, Name, Size, SUM(quantity) as 'Total Quantity' 
-    FROM LineItems GROUP BY Size, Name, Material, Type ORDER BY Type asc, Material asc, Name asc, Size asc""")
-    data = cur.execute("SELECT * FROM Condensed").fetchall()
-    print(*data, sep='\n')
+    #New table for each job maybe?
+    
 
     with open('output.csv', 'w', newline='') as f:
+        data = cur.execute("SELECT * FROM LineItems").fetchall()
+        print(*data, sep='\n')
         writer = csv.writer(f)
-        writer.writerow(['Type', 'Material', 'Name', 'Size', 'Total Quantity'])
+        writer.writerow(['Type', 'Material', 'Name', 'Size', 'Quantity', 'Job'])
+        writer.writerows(data)
+        writer.writerow(['', '', '', '', '', '', ''])
+        cur.execute("""CREATE TABLE Condensed AS SELECT Type, Material, Name, Size, SUM(quantity) as 'Total Quantity' 
+        FROM LineItems GROUP BY Size, Name, Material, Type ORDER BY Type asc, Material asc, Name asc, Size asc""")
+        data = cur.execute("SELECT * FROM Condensed").fetchall()
+        print(*data, sep='\n')
         writer.writerows(data)
     
     con.commit()
@@ -160,6 +171,17 @@ if __name__ == '__main__':
         shutil.rmtree("FileCache")
     os.mkdir("FileCache")
     win = Tk()
+    win.geometry("500x500")
+    ws = win.winfo_screenwidth() # width of the screen
+    hs = win.winfo_screenheight() # height of the screen
+
+    # calculate x and y coordinates for the Tk root window
+    x = (ws/2) - 150
+    y = (hs/2) - 200
+    win.geometry('%dx%d+%d+%d' % (200, 200, x, y))
+    win.geometry("")
+    win.minsize(width=200, height=300)
+    win.resizable(True,True)
     win.title("Purchase Order Generator")
     Label(win, text="Job Numbers ####:", font=('Aerial 16 bold')).grid(row='0', column='0')
     #plus button that adds another input box

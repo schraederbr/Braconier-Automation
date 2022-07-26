@@ -12,21 +12,25 @@ def verifyJobNumber(jNumber):
     print("Invalid job number")
     return False
 
-#Multiple extensions might have caused a bug with /FileCache error
+#Need to make this work with any year. Probably should just use regex like this: M:\BPH Bids FY####
 def getXlFiles(jobNumbers, folderPath = "M:\BPH Bids FY2022", extensions=[".xls", ".xlsx"]):
     print(jobNumbers)
     xlFiles = []
     jobPaths = []
+    #May want to do regex on .rglod(*) if it's faster
     for j in jobNumbers:
         if verifyJobNumber(j):
             for p in Path(folderPath).glob("*" + j + "*"):
-                for path in Path(p).rglob("*Estimating Take-Offs*"):
+                for path in Path(p).rglob("*BUYOUT*"):
                     jobPaths.append(path)
     for folder in jobPaths:
-        for extension in extensions:
-            for path in Path(folder).rglob('**/*' + extension):
-                xlFiles.append(path)
         
+        #This is slightly impressice but probably good enough
+        print(folder.as_posix())
+        if("ESTIMATING" in folder.as_posix().upper()):
+            for extension in extensions:
+                for path in Path(folder).rglob('**/*' + extension):
+                    xlFiles.append(path)
     return xlFiles
     
     #maybe return the whole path object instead of just the path str
