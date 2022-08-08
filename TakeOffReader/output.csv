@@ -1,4 +1,40 @@
 Type,Material,Name,Size,Quantity,Job
+,,,,,All Jobs Combined
+Excav & Backfill, - Trenching - ,2' x 2' Ditch,3,25.3536666666667
+Excav & Backfill, - Trenching - ,2' x 3' Ditch,4,522.310166666667
+Excav & Backfill, - Trenching - ,3' x 3' Ditch,6,233.137666666667
+Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,1/4 Bend Long Sweep,3,1.0
+Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,1/4 Bend Long Sweep,4,15.0
+Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,1/4 Bend Long Sweep,6,7.0
+Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,1/4 Bend Red,4x3,1.0
+Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,1/8 Bend,3,1.0
+Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,1/8 Bend,4,3.0
+Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,1/8 Bend,6,1.0
+Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Combination,4,15.0
+Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Combination,6,5.0
+Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Combination - Red,4x4x3,2.0
+Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Coupling,3,1.0
+Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Coupling,4,28.0
+Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Coupling,6,13.0
+Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Reducing Coupling,4x3,1.0
+Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Wye,4,1.0
+Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Wye,6,1.0
+Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Wye - Reducing,6x6x4,1.0
+Misc. Consumables, - Plastic Joints Glue & Cleaner - ,Glue & Cleaner,Cement - PVC,22.415
+Misc. Consumables, - Plastic Joints Glue & Cleaner - ,Glue & Cleaner,Cleaner-All Purpose,22.415
+Nipples,PVC - Plain End Sch 40 - Thread,Nipple,4,2.0
+Pipe,PVC - Plain End Plastic Sch 40 - SolvWld,Pipe,3,25.3536666666667
+Pipe,PVC - Plain End Plastic Sch 40 - SolvWld,Pipe,4,522.310166666667
+Pipe,PVC - Plain End Plastic Sch 40 - SolvWld,Pipe,6,233.137666666667
+Pipe Cut,Plastic - Pipe Cut with Chop Saw - ChopSaw,PIPE CUT,3,7.0
+Pipe Cut,Plastic - Pipe Cut with Chop Saw - ChopSaw,PIPE CUT,4,64.0
+Pipe Cut,Plastic - Pipe Cut with Chop Saw - ChopSaw,PIPE CUT,6,30.0
+Sleeves,Carbon Steel - Sleeve - Floor - InstPan,Pipe Sleeve,10,1.0
+Sleeves,Carbon Steel - Sleeve - Floor - InstPan,Pipe Sleeve,5,1.0
+Sleeves,Carbon Steel - Sleeve - Floor - InstPan,Pipe Sleeve,6,18.0
+Sleeves,Carbon Steel - Sleeve - Floor - InstPan,Pipe Sleeve,8,6.0
+Sleeves,Carbon Steel - Sleeve - Wall Exterior - InstBlk,Pipe Sleeve,10,1.0
+,,,,,,
 Pipe,PVC - Plain End Plastic Sch 40 - SolvWld,Pipe,3,25.3536666666667,300 Univeristy UG
 Pipe,PVC - Plain End Plastic Sch 40 - SolvWld,Pipe,4,522.310166666667,300 Univeristy UG
 Pipe,PVC - Plain End Plastic Sch 40 - SolvWld,Pipe,6,233.137666666667,300 Univeristy UG
@@ -33,85 +69,3 @@ Sleeves,Carbon Steel - Sleeve - Floor - InstPan,Pipe Sleeve,6,18.0,300 Univerist
 Sleeves,Carbon Steel - Sleeve - Floor - InstPan,Pipe Sleeve,8,6.0,300 Univeristy UG
 Sleeves,Carbon Steel - Sleeve - Floor - InstPan,Pipe Sleeve,10,1.0,300 Univeristy UG
 Sleeves,Carbon Steel - Sleeve - Wall Exterior - InstBlk,Pipe Sleeve,10,1.0,300 Univeristy UG
-Pipe,PVC - Plain End Plastic Sch 40 - SolvWld,Pipe,2,176.96875,Billie Martinez UG
-Pipe,PVC - Plain End Plastic Sch 40 - SolvWld,Pipe,3,135.933333333333,Billie Martinez UG
-Pipe,PVC - Plain End Plastic Sch 40 - SolvWld,Pipe,4,86.24,Billie Martinez UG
-Nipples,PVC - Plain End Sch 40 - Thread,Nipple,2,7.0,Billie Martinez UG
-Nipples,PVC - Plain End Sch 40 - Thread,Nipple,3,9.0,Billie Martinez UG
-Nipples,PVC - Plain End Sch 40 - Thread,Nipple,4,4.0,Billie Martinez UG
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,1/4 Bend Long Sweep,2,12.0,Billie Martinez UG
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,1/4 Bend Long Sweep,3,3.0,Billie Martinez UG
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,1/4 Bend Long Sweep,4,4.0,Billie Martinez UG
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,1/8 Bend,2,9.0,Billie Martinez UG
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,1/8 Bend,3,6.0,Billie Martinez UG
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Combination,3,3.0,Billie Martinez UG
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Combination,4,10.0,Billie Martinez UG
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Combination - Red,3x3x2,5.0,Billie Martinez UG
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Combination - Red,4x4x3,1.0,Billie Martinez UG
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Coupling,2,3.0,Billie Martinez UG
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Coupling,3,1.0,Billie Martinez UG
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,P-Trap,2,5.0,Billie Martinez UG
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,P-Trap,3,2.0,Billie Martinez UG
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Reducing Coupling,3x2,3.0,Billie Martinez UG
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Wye - Reducing,3x3x2,2.0,Billie Martinez UG
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Wye - Reducing,4x4x2,6.0,Billie Martinez UG
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Wye - Reducing,4x4x3,6.0,Billie Martinez UG
-Excav & Backfill, - Trenching - ,2' x 2' Ditch,2,176.96875,Billie Martinez UG
-Excav & Backfill, - Trenching - ,2' x 2' Ditch,3,135.933333333333,Billie Martinez UG
-Excav & Backfill, - Trenching - ,2' x 3' Ditch,4,86.24,Billie Martinez UG
-Misc. Consumables, - Plastic Joints Glue & Cleaner - ,Glue & Cleaner,Cement - PVC,8.3829,Billie Martinez UG
-Misc. Consumables, - Plastic Joints Glue & Cleaner - ,Glue & Cleaner,Cleaner-All Purpose,8.3829,Billie Martinez UG
-Pipe Cut,Plastic - Pipe Cut with Chop Saw - ChopSaw,PIPE CUT,2,23.0,Billie Martinez UG
-Pipe Cut,Plastic - Pipe Cut with Chop Saw - ChopSaw,PIPE CUT,3,20.0,Billie Martinez UG
-Pipe Cut,Plastic - Pipe Cut with Chop Saw - ChopSaw,PIPE CUT,4,30.0,Billie Martinez UG
-,,,,,,
-Excav & Backfill, - Trenching - ,2' x 2' Ditch,2,176.96875
-Excav & Backfill, - Trenching - ,2' x 2' Ditch,3,161.2869999999997
-Excav & Backfill, - Trenching - ,2' x 3' Ditch,4,608.550166666667
-Excav & Backfill, - Trenching - ,3' x 3' Ditch,6,233.137666666667
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,1/4 Bend Long Sweep,2,12.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,1/4 Bend Long Sweep,3,4.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,1/4 Bend Long Sweep,4,19.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,1/4 Bend Long Sweep,6,7.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,1/4 Bend Red,4x3,1.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,1/8 Bend,2,9.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,1/8 Bend,3,7.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,1/8 Bend,4,3.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,1/8 Bend,6,1.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Combination,3,3.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Combination,4,25.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Combination,6,5.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Combination - Red,3x3x2,5.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Combination - Red,4x4x3,3.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Coupling,2,3.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Coupling,3,2.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Coupling,4,28.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Coupling,6,13.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,P-Trap,2,5.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,P-Trap,3,2.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Reducing Coupling,3x2,3.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Reducing Coupling,4x3,1.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Wye,4,1.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Wye,6,1.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Wye - Reducing,3x3x2,2.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Wye - Reducing,4x4x2,6.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Wye - Reducing,4x4x3,6.0
-Fittings,PVC - Hub x Hub Plastic DWV - SolvWld,Wye - Reducing,6x6x4,1.0
-Misc. Consumables, - Plastic Joints Glue & Cleaner - ,Glue & Cleaner,Cement - PVC,30.7979
-Misc. Consumables, - Plastic Joints Glue & Cleaner - ,Glue & Cleaner,Cleaner-All Purpose,30.7979
-Nipples,PVC - Plain End Sch 40 - Thread,Nipple,2,7.0
-Nipples,PVC - Plain End Sch 40 - Thread,Nipple,3,9.0
-Nipples,PVC - Plain End Sch 40 - Thread,Nipple,4,6.0
-Pipe,PVC - Plain End Plastic Sch 40 - SolvWld,Pipe,2,176.96875
-Pipe,PVC - Plain End Plastic Sch 40 - SolvWld,Pipe,3,161.2869999999997
-Pipe,PVC - Plain End Plastic Sch 40 - SolvWld,Pipe,4,608.550166666667
-Pipe,PVC - Plain End Plastic Sch 40 - SolvWld,Pipe,6,233.137666666667
-Pipe Cut,Plastic - Pipe Cut with Chop Saw - ChopSaw,PIPE CUT,2,23.0
-Pipe Cut,Plastic - Pipe Cut with Chop Saw - ChopSaw,PIPE CUT,3,27.0
-Pipe Cut,Plastic - Pipe Cut with Chop Saw - ChopSaw,PIPE CUT,4,94.0
-Pipe Cut,Plastic - Pipe Cut with Chop Saw - ChopSaw,PIPE CUT,6,30.0
-Sleeves,Carbon Steel - Sleeve - Floor - InstPan,Pipe Sleeve,10,1.0
-Sleeves,Carbon Steel - Sleeve - Floor - InstPan,Pipe Sleeve,5,1.0
-Sleeves,Carbon Steel - Sleeve - Floor - InstPan,Pipe Sleeve,6,18.0
-Sleeves,Carbon Steel - Sleeve - Floor - InstPan,Pipe Sleeve,8,6.0
-Sleeves,Carbon Steel - Sleeve - Wall Exterior - InstBlk,Pipe Sleeve,10,1.0

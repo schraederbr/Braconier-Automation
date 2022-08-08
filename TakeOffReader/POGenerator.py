@@ -8,17 +8,13 @@ import sqlite3
 import subprocess
 import csv
 import FolderSearcher
-import pyexcel as p
+#import pyexcel as p
+#pyexcel doesn't work with nuitka compiler for exe. 
+#pyexcel only needed if using xls files
 import shutil
 
-#Add warning and popup incase output.csv cannot be written to
-#Add different job columns
-#How to speed up startup when running as an EXE?
-#Submit button not getting properly disabled
-#Need to make this work in any arbitrary year folder. Currently just set to 2022
-#How to deal with duplicates, maybe have a f
 
-#The plus button and the boxes I don't think line up still 
+#How to speed up startup when running as an EXE?
 class LineItem:
     def __init__(self, type, material, name, size, quantity, job):
         self.type = type
@@ -81,10 +77,10 @@ def createButton(btn):
     jobIndex += 1
 
 def convertAndCache(filePath):
-    if(filePath.name.endswith(".xls")):
-        p.save_book_as(file_name=str(filePath),
-                dest_file_name='FileCache/' + filePath.stem + '.xlsx')
-    elif(filePath.name.endswith(".xlsx")):
+    # if(filePath.name.endswith(".xls")):
+    #     p.save_book_as(file_name=str(filePath),
+    #             dest_file_name='FileCache/' + filePath.stem + '.xlsx')
+    if(filePath.name.endswith(".xlsx")):
         #this is giving errors, I think I need to use an absolute path instead of a relative path
         shutil.copy2(filePath, os.getcwd() + "/FileCache")
 
@@ -152,21 +148,32 @@ def makeDatabase(paths):
     
 
     with open('output.csv', 'w', newline='') as f:
-        data = cur.execute("SELECT * FROM LineItems").fetchall()
-        print(*data, sep='\n')
         writer = csv.writer(f)
         writer.writerow(['Type', 'Material', 'Name', 'Size', 'Quantity', 'Job'])
-        writer.writerows(data)
-        writer.writerow(['', '', '', '', '', '', ''])
+        writer.writerow(['', '', '', '', '', 'All Jobs Combined'])
         cur.execute("""CREATE TABLE Condensed AS SELECT Type, Material, Name, Size, SUM(quantity) as 'Total Quantity' 
         FROM LineItems GROUP BY Size, Name, Material, Type ORDER BY Type asc, Material asc, Name asc, Size asc""")
-        data = cur.execute("SELECT * FROM Condensed").fetchall()
-        print(*data, sep='\n')
-        writer.writerows(data)
+        conData = cur.execute("SELECT * FROM Condensed").fetchall()
+        print(*conData, sep='\n')
+        writer.writerows(conData)
+        writer.writerow(['', '', '', '', '', '', ''])
+        lineData = cur.execute("SELECT * FROM LineItems").fetchall()
+        print(*lineData, sep='\n')
+        writer.writerows(lineData)
+        
+        
     
     con.commit()
     subprocess.run("explorer output.csv")
 if __name__ == '__main__':
+    while(True):
+        try:
+            f = open('output.csv', 'w', newline='')
+            f.close()
+            break
+        except:
+            tkinter.messagebox.showinfo("Error with output.csv","Please close output.csv and try again")
+    print(os.getcwd())
     if(os.path.exists("FileCache")):
         shutil.rmtree("FileCache")
     os.mkdir("FileCache")
