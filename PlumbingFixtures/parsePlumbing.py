@@ -6,7 +6,7 @@ from typing import List
 
 import openpyxl
 from tkinter import filedialog
-
+import excelValuesOnly as xl
 
 
 
@@ -37,6 +37,8 @@ class plumbingJob:
             return "{} --> {}".format(self.id, self.description)
 
         def getTotalPrice(self) -> float:
+            if(not (type(self.bidDayUnitPrice) == int or type(self.bidDayUnitPrice) == float)):
+                print("{}, {}".format(type(self.bidDayUnitPrice), type(self.quantity)))
             return self.bidDayUnitPrice * self.quantity
 
         def __str__(self) -> str:
@@ -94,6 +96,9 @@ def parseFixtures(sourcePath, sourceQuantityCol, sourceStartRow):
     thisJob = plumbingJob(os.path.basename(sourcePath), [])
     #maybe create a data structure that is a row 
     for row in iterator:
+        # if(row[0].value is None):
+        #     currentRow = 0
+        # else:
         currentRow = row[0].row
         currentRow = str(currentRow)
         currentCell = sourceSheet[sourceQuantityCol + currentRow].value
@@ -121,6 +126,9 @@ my_fill = openpyxl.styles.fills.PatternFill(patternType='solid', fgColor=my_red)
 if __name__ == '__main__':
     sPath = filedialog.askdirectory(title = "Select the directory containing take-offs")
     #sPath = os.path.basename()
+    for f in os.listdir(sPath):
+        xl.convert(sPath + "/" + f, "Plbg")
+
     print(sPath)
 
     myJobs: List[plumbingJob] = []
@@ -152,8 +160,8 @@ if __name__ == '__main__':
             #may need to compare rows in a less exact way, so that similar rows are not duplicated
             for r in rowIndex:
                 if row.equals(r):
-                    print('Same row found')
-                    print("Manufacturer: {}, Bid Day Unit Price: {}".format(row.manufacturer, row.bidDayUnitPrice))
+                    #print('Same row found')
+                    #print("Manufacturer: {}, Bid Day Unit Price: {}".format(row.manufacturer, row.bidDayUnitPrice))
                     finalSheet.cell(column=baseColumn, row=rowIndex[r]).value = row.manufacturer
                     if("ERROR" in str(row.quantity)):
                         finalSheet.cell(column=baseColumn+1, row=rowIndex[r]).fill = my_fill
