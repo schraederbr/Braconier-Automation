@@ -12,9 +12,14 @@ import FolderSearcher
 #pyexcel doesn't work with nuitka compiler for exe. 
 #pyexcel only needed if using xls files
 import shutil
+from sqlescapy import sqlescape
 
+#things like 2-2 and 2/2 are getting auto converted to dates, need to prevent this! May need to use .xlsx instead of .csv
+# "=""2008-10-03""" adding equals sign before the text might work, let's see
 
 #How to speed up startup when running as an EXE?
+
+#Potentially add iterator to make it easier to get attributes (usefull for the query checking with sqlescape) 
 class LineItem:
     def __init__(self, type, material, name, size, quantity, job):
         self.type = type
@@ -84,6 +89,9 @@ def convertAndCache(filePath):
         #this is giving errors, I think I need to use an absolute path instead of a relative path
         shutil.copy2(filePath, os.getcwd() + "/FileCache")
 
+def cleanString(string):
+    return string.replace(" ", "")
+
 def makeDatabase(paths):
     #Did formatting change?
     con = sqlite3.connect('po.db')
@@ -137,16 +145,53 @@ def makeDatabase(paths):
         #f.write("{},{},{},{},{},{}".format("Type", "Material", "Name", "Size", "Quantity","job"))           
         for l in lineItems:
             #f.write(str(l))
-            query = 'INSERT INTO LineItems(Type, Material, Name, Size, Quantity, Job) VALUES("{}", "{}", "{}", "{}", {}, "{}")'.format( l.type, l.material, l.name, l.size, l.quantity, l.job)
+            #This is quite repetitive, might benefit slightly from a function
+            #Could remove the print statements, after testing
+            oldType = str(l.type)
+            oldMaterial = str(l.material)
+            oldName = str(l.name)
+            oldSize = str(l.size)
+            oldQuantity = str(l.quantity)
+            oldJob = str(l.job)
+
+            l.type = sqlescape(str(l.type))
+            if(oldType != str(l.type)):
+                print("Type changed from " + oldType + " to " + str(l.Type))
+            l.material = sqlescape(str(l.material))
+            if(oldMaterial != str(l.material)):
+                print("Material changed from " + oldMaterial + " to " + str(l.material))
+            l.name = sqlescape(str(l.name))
+            if(oldName != str(l.name)):
+                print("Name changed from " + oldName + " to " + str(l.name))
+            l.size = sqlescape(str(l.size))
+            if(oldSize != str(l.size)):
+                print("Size changed from " + oldSize + " to " + str(l.size))
+            l.quantity = sqlescape(str(l.quantity))
+            if(oldQuantity != str(l.quantity)):
+                print("Quantity changed from " + oldQuantity + " to " + str(l.quantity))
+            l.job = sqlescape(str(l.job))
+            if(oldJob != str(l.job)):
+                print("Job changed from " + oldJob + " to " + str(l.job))
+            
+            #Adding an equal sign or quotessomething like that to each value would prevent it from being converted into dates
+            # '=' + str(l.size) something like this, but = doesn't work when the input is not a number
+            # Maybe I should clean the input files instead of the output
+            # The single quote method is alright, even though the output has quotes in it
+            query = 'INSERT INTO LineItems(Type, Material, Name, Size, Quantity, Job) VALUES("{}", "{}", "{}", "\'{}\'", {}, "{}")'.format(l.type, l.material, l.name, l.size, l.quantity, l.job)
+            try:
+                cur.execute(query)
+            except:
+                print("Error writing to database. Failed input below:")
+                print(l)
             #print(query)
-            cur.execute(query)
+            
     #if(fileName is not None):
         #f.close()
     #May want # HAVING COUNT(*)>1; at the end I don't know what this does though
     #Create a separate table with this data in the database:
     #New table for each job maybe?
-    
-
+    #Changing directories this way is slightly dumb, but it works
+    os.chdir("../")
     with open('output.csv', 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(['Type', 'Material', 'Name', 'Size', 'Quantity', 'Job'])
@@ -160,7 +205,6 @@ def makeDatabase(paths):
         lineData = cur.execute("SELECT * FROM LineItems").fetchall()
         print(*lineData, sep='\n')
         writer.writerows(lineData)
-        
         
     
     con.commit()
@@ -190,7 +234,7 @@ if __name__ == '__main__':
     win.minsize(width=200, height=300)
     win.resizable(True,True)
     win.title("Purchase Order Generator")
-    Label(win, text="Job Numbers ####:", font=('Aerial 16 bold')).grid(row='0', column='0')
+    Label(win, text="Estimating Job Numbers ####:", font=('Aerial 16 bold')).grid(row='0', column='0')
     #plus button that adds another input box
     
     addBtn = ttk.Button(win, text="Add", command= lambda: createButton(addBtn))
