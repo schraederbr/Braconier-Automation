@@ -16,3 +16,4 @@ PlumbingFixturesForROIS/WinPython/*
 *build*
 *dist*
 !build.bat
+!TakeOffReader/ExampleJobs**
