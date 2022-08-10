@@ -13,6 +13,7 @@ import FolderSearcher
 #pyexcel only needed if using xls files
 import shutil
 from sqlescapy import sqlescape
+#Figure out how to set the current working directory to the shortcut location
 
 #things like 2-2 and 2/2 are getting auto converted to dates, need to prevent this! May need to use .xlsx instead of .csv
 # "=""2008-10-03""" adding equals sign before the text might work, let's see
@@ -192,7 +193,7 @@ def makeDatabase(paths):
     #New table for each job maybe?
     #Changing directories this way is slightly dumb, but it works
     os.chdir("../")
-    with open('output.csv', 'w', newline='') as f:
+    with open('MaterialsOutput.csv', 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(['Type', 'Material', 'Name', 'Size', 'Quantity', 'Job'])
         writer.writerow(['', '', '', '', '', 'All Jobs Combined'])
@@ -208,15 +209,15 @@ def makeDatabase(paths):
         
     
     con.commit()
-    subprocess.run("explorer output.csv")
+    subprocess.run("explorer MaterialsOutput.csv")
 if __name__ == '__main__':
     while(True):
         try:
-            f = open('output.csv', 'w', newline='')
+            f = open('MaterialsOutput.csv', 'w', newline='')
             f.close()
             break
         except:
-            tkinter.messagebox.showinfo("Error with output.csv","Please close output.csv and try again")
+            tkinter.messagebox.showinfo("Error with MaterialsOutput.csv","Please close MaterialsOutput.csv and try again")
     print(os.getcwd())
     if(os.path.exists("FileCache")):
         shutil.rmtree("FileCache")

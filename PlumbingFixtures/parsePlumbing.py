@@ -2,15 +2,14 @@ from __future__ import annotations
 import os
 import subprocess
 import sys
+import tkinter
 from typing import List
-
 import openpyxl
 from tkinter import filedialog
 import excelValuesOnly as xl
 
-
-
-
+#Figure out how to set the current working directory to the shortcut location
+       
 class plumbingJob:
     class partRow:
         def __init__(self, id, description: str, quantity, size_strength = None
@@ -69,7 +68,7 @@ class plumbingJob:
 
 
 
-finalPath = "FixtureTakeoff.xlsx"
+finalPath = "Fixtures.xlsx"
 
 final = openpyxl.Workbook()
 finalSheet = final.active
@@ -124,12 +123,14 @@ my_red = openpyxl.styles.colors.Color(rgb='00FF0000')
 my_fill = openpyxl.styles.fills.PatternFill(patternType='solid', fgColor=my_red)
 
 if __name__ == '__main__':
-    sPath = filedialog.askdirectory(title = "Select the directory containing take-offs")
+    tkinter.messagebox.showinfo("Instructions", "Put your job recap files into a single folder \n you will be prompted to select that folder next")
+    sPath = filedialog.askdirectory(title = "Select the directory containing recaps", initialdir = "../")
     #sPath = os.path.basename()
     for f in os.listdir(sPath):
         xl.convert(sPath + "/" + f, "Plbg")
 
     print(sPath)
+    print("Processing...")
 
     myJobs: List[plumbingJob] = []
     sourcePaths = []
@@ -185,6 +186,7 @@ if __name__ == '__main__':
                 finalSheet.cell(column=baseColumn+3, row=row.row).value = row.bidDayUnitPrice                
     #print(myJobs)
     #print(*rowIndex, sep='\n')
+    os.chdir('../')
     final.save(finalPath)
     subprocess.run("explorer {}".format(finalPath))
     #fd = filedialog.askopenfile(title="Select Spec File", filetypes=[("PDFs", ".pdf")])

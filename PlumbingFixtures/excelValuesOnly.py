@@ -8,7 +8,7 @@ import time
 
 
 def convert(filePath, sheetName):
-    print("Coverting page {} of {} to Values Only".format(sheetName, filePath))
+    print("Converting page {} of {} to Values Only".format(sheetName, filePath))
     owb = openpyxl.load_workbook(filePath)
     ows = owb.active
     maxRow = ows.max_row
